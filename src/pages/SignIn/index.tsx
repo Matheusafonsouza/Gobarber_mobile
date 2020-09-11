@@ -5,6 +5,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  TextInput,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
@@ -29,6 +30,7 @@ const SignIn: React.FC = () => {
   const navigation = useNavigation();
 
   const formRef = useRef<FormHandles>(null);
+  const passwordInputRef = useRef<TextInput>(null);
 
   const handleSignIn = useCallback((data: object) => {
     console.log(data);
@@ -53,8 +55,25 @@ const SignIn: React.FC = () => {
             </View>
 
             <Form ref={formRef} onSubmit={handleSignIn}>
-              <Input name="email" icon="mail" placeholder="E-mail" />
-              <Input name="password" icon="lock" placeholder="Senha" />
+              <Input
+                autoCorrect={false}
+                autoCapitalize="none"
+                keyboardType="email-address"
+                name="email"
+                icon="mail"
+                returnKeyType="next"
+                placeholder="E-mail"
+                onSubmitEditing={() => passwordInputRef.current?.focus()}
+              />
+              <Input
+                secureTextEntry
+                name="password"
+                icon="lock"
+                returnKeyType="send"
+                placeholder="Senha"
+                onSubmitEditing={() => formRef.current?.submitForm()}
+                ref={passwordInputRef}
+              />
 
               <View>
                 <Button onPress={() => formRef.current?.submitForm()}>
